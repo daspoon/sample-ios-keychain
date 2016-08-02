@@ -12,14 +12,32 @@ class ListViewController: UITableViewController
 
     let cellReuseIdentifier = "default"
 
-    var things: [String] = ["one", "two", "three"]
+    let keychain: KeyChain
+
+    var keys: [String] = []
 
 
-    init()
+    init(keychain: KeyChain)
       {
+        self.keychain = keychain
+
         super.init(style: .Plain)
 
+        keychain.addObserver(self, forKeyPath: "keys", options: .Initial, context: nil)
+
         title = NSLocalizedString("ITEM LIST", comment: "ListViewController title")
+      }
+
+
+    deinit
+      {
+        keychain.removeObserver(self, forKeyPath: "keys")
+      }
+
+
+    func addEntry(sender: AnyObject?)
+      {
+        self.navigationController?.pushViewController(ItemViewController(keychain: keychain), animated: true)
       }
 
 
@@ -30,6 +48,8 @@ class ListViewController: UITableViewController
         super.viewDidLoad()
 
         tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: cellReuseIdentifier)
+
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: #selector(ListViewController.addEntry(_:)))
       }
 
 
@@ -37,7 +57,7 @@ class ListViewController: UITableViewController
 
     override func tableView(sender: UITableView, numberOfRowsInSection section: Int) -> Int
       {
-        return things.count
+        return keys.count
       }
 
 
@@ -46,7 +66,7 @@ class ListViewController: UITableViewController
         assert(path.section == 0, "unexpected argument")
 
         let cell = sender.dequeueReusableCellWithIdentifier(cellReuseIdentifier, forIndexPath:path)
-        cell.textLabel!.text = things[path.row]
+        cell.textLabel!.text = keys[path.row]
         return cell
       }
 
@@ -55,7 +75,19 @@ class ListViewController: UITableViewController
 
     override func tableView(sender: UITableView, didSelectRowAtIndexPath path: NSIndexPath)
       {
-        self.navigationController?.pushViewController(ItemViewController(), animated: true)
+        assert(path.section == 0, "unexpected argument")
+
+        self.navigationController?.pushViewController(ItemViewController(keychain: keychain, key: keys[path.row]), animated: true)
+      }
+
+
+    // MARK: - NSKeyValueObserving
+
+    override func observeValueForKeyPath(path: String?, ofObject sender: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>)
+      {
+        assert(sender === keychain && path == "keys")
+
+        keys = keychain.keys
       }
 
 

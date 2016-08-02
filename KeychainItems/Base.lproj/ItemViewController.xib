@@ -7,7 +7,6 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ItemViewController" customModule="KeychainItems" customModuleProvider="target">
             <connections>
-                <outlet property="button" destination="MIZ-38-UTt" id="OoF-dw-bbj"/>
                 <outlet property="keyLabel" destination="UEV-db-xvW" id="ryh-ZN-I7D"/>
                 <outlet property="keyTextField" destination="bSg-Ah-Wmo" id="Ue7-f8-mhw"/>
                 <outlet property="valueLabel" destination="61P-Qq-DHa" id="qxl-vm-Ksw"/>
@@ -37,35 +36,25 @@
                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="m5n-pu-ad0" userLabel="valueTextView">
+                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="m5n-pu-ad0" userLabel="valueTextView">
                     <rect key="frame" x="73" y="67" width="503" height="487"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                 </textView>
-                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MIZ-38-UTt" userLabel="button">
-                    <rect key="frame" x="482" y="562" width="94" height="30"/>
-                    <state key="normal" title="BUTTON"/>
-                    <connections>
-                        <action selector="buttonPressed:" destination="-1" eventType="touchUpInside" id="f2p-9i-j8Z"/>
-                    </connections>
-                </button>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstAttribute="trailing" secondItem="bSg-Ah-Wmo" secondAttribute="trailing" constant="24" id="2I6-tb-yXx"/>
-                <constraint firstItem="MIZ-38-UTt" firstAttribute="top" secondItem="m5n-pu-ad0" secondAttribute="bottom" constant="8" id="4kq-VF-xUd"/>
                 <constraint firstItem="UEV-db-xvW" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="24" id="HGb-sQ-P4d"/>
                 <constraint firstItem="m5n-pu-ad0" firstAttribute="top" secondItem="bSg-Ah-Wmo" secondAttribute="bottom" constant="17" id="Jy0-8E-lGw"/>
                 <constraint firstItem="m5n-pu-ad0" firstAttribute="leading" secondItem="61P-Qq-DHa" secondAttribute="trailing" constant="13" id="MvF-5R-26Y"/>
                 <constraint firstItem="61P-Qq-DHa" firstAttribute="top" secondItem="UEV-db-xvW" secondAttribute="bottom" constant="22" id="OoP-dS-6Ti"/>
-                <constraint firstAttribute="trailing" secondItem="MIZ-38-UTt" secondAttribute="trailing" constant="24" id="PLa-1i-Dbu"/>
                 <constraint firstItem="61P-Qq-DHa" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="8" id="PbI-EW-9oo"/>
                 <constraint firstAttribute="trailing" secondItem="m5n-pu-ad0" secondAttribute="trailing" constant="24" id="Q5L-D3-ETj"/>
                 <constraint firstItem="UEV-db-xvW" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="8" id="YSb-Sm-Vc1"/>
                 <constraint firstItem="bSg-Ah-Wmo" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="20" id="csn-ZO-qqk"/>
-                <constraint firstAttribute="bottom" secondItem="MIZ-38-UTt" secondAttribute="bottom" constant="8" id="mCB-9C-Tu9"/>
                 <constraint firstItem="bSg-Ah-Wmo" firstAttribute="leading" secondItem="UEV-db-xvW" secondAttribute="trailing" constant="13" id="xDD-Jl-dBx"/>
             </constraints>
             <point key="canvasLocation" x="632" y="664"/>
