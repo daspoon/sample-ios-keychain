@@ -1,0 +1,15 @@
+/* 
+
+  Copyright (c) 2016 David Spooner; see License.txt
+
+*/
+
+"ITEM" = "Item";
+
+"ITEM LIST" = "Items";
+
+"KEY REQUIRED" = "Key Required";
+"PLEASE PROVIDE A KEY FOR THIS ENTRY" = "Please provide a key for this entry.";
+
+"KEY EXISTS" = "Key Exists";
+"AN ENTRY FOR THIS KEY ALREADY EXISTS" = "An entry for this key already exists.";

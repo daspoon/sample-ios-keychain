@@ -98,21 +98,15 @@ class ItemViewController : UIViewController
         assert(editing, "invalid state")
 
         // Get the content of the key field, stripped of enclosing whitespace
-        let newKey = keyTextField.text ?? ""
+        let newKey = keyTextField.text?.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet()) ?? ""
 
         // Ensure the new key is not empty
-        if newKey == "" {
-          NSLog("key is required")
-          return
-        }
+        guard newKey != "" else { return presentAlertWithTitle("KEY REQUIRED", message: "PLEASE PROVIDE A KEY FOR THIS ENTRY") }
 
         // If the key has changed then some extra validation and cleanup is required...
         if newKey != key {
           // Ensure the specified key does not already exist
-          if keychain[newKey] != nil {
-            NSLog("key already exists")
-            return
-          }
+          guard keychain[newKey] == nil else { return presentAlertWithTitle("KEY EXISTS", message: "AN ENTRY FOR THIS KEY ALREADY EXISTS") }
           // Remove the old entry, if any
           if key != "" {
             keychain[key] = nil
@@ -128,6 +122,27 @@ class ItemViewController : UIViewController
         mode = .None
 
         setEditing(false, animated: true)
+      }
+
+
+    func presentAlertWithTitle(title: String, message: String)
+      {
+        // Present a UIAlertController with the given (unlocalized) title and message. The alert
+        // has a single dismiss button and no completion block.
+
+        let alert = UIAlertController(
+            title: NSLocalizedString(title, comment: "Alert title"),
+            message: NSLocalizedString(message, comment: "Alert message"),
+            preferredStyle: .Alert
+          )
+
+        alert.addAction(UIAlertAction(
+            title: NSLocalizedString("OK", comment: "Alert dismiss title"),
+            style: .Default,
+            handler: nil
+          ))
+
+        presentViewController(alert, animated: true, completion: nil)
       }
 
 
