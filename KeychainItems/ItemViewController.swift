@@ -249,6 +249,12 @@ class ItemViewController : UIViewController
         // Present the item key
         keyTextField.text = key
 
+        // Give the value view a border and a slightly darker background color.
+        valueTextView.layer.cornerRadius = 8
+        valueTextView.layer.borderWidth = 1
+        valueTextView.layer.borderColor = UIColor(red: 0.90, green: 0.90, blue: 0.90, alpha: 1).CGColor
+        valueTextView.backgroundColor = UIColor(red: 0.98, green: 0.98, blue: 0.98, alpha: 1)
+
         // Set the target/action of the show button
         showButton.addTarget(self, action: #selector(ItemViewController.show(_:)), forControlEvents: .TouchUpInside)
 
