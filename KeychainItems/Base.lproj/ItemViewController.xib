@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -9,6 +9,7 @@
             <connections>
                 <outlet property="keyLabel" destination="UEV-db-xvW" id="ryh-ZN-I7D"/>
                 <outlet property="keyTextField" destination="bSg-Ah-Wmo" id="Ue7-f8-mhw"/>
+                <outlet property="showButton" destination="bnH-3t-eRh" id="wCG-v4-Zm7"/>
                 <outlet property="valueLabel" destination="61P-Qq-DHa" id="qxl-vm-Ksw"/>
                 <outlet property="valueTextView" destination="m5n-pu-ad0" id="Jfg-mI-rts"/>
                 <outlet property="view" destination="iN0-l3-epB" id="Lh2-BR-sVH"/>
@@ -19,45 +20,53 @@
             <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="KEY" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UEV-db-xvW" userLabel="keyLabel">
-                    <rect key="frame" x="8" y="24" width="52" height="21"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                    <nil key="highlightedColor"/>
-                </label>
                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="bSg-Ah-Wmo" userLabel="keyTextField">
-                    <rect key="frame" x="73" y="20" width="503" height="30"/>
+                    <rect key="frame" x="8" y="49" width="584" height="30"/>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <textInputTraits key="textInputTraits"/>
                 </textField>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="VALUE" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="61P-Qq-DHa" userLabel="valueLabel">
-                    <rect key="frame" x="8" y="67" width="52" height="21"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="VALUE" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="61P-Qq-DHa" userLabel="valueLabel">
+                    <rect key="frame" x="8" y="87" width="584" height="21"/>
+                    <fontDescription key="fontDescription" type="system" weight="light" pointSize="14"/>
                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="m5n-pu-ad0" userLabel="valueTextView">
-                    <rect key="frame" x="73" y="67" width="503" height="487"/>
+                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="m5n-pu-ad0" userLabel="valueTextView">
+                    <rect key="frame" x="8" y="116" width="584" height="438"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                 </textView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="KEY" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UEV-db-xvW" userLabel="keyLabel">
+                    <rect key="frame" x="8" y="20" width="584" height="21"/>
+                    <fontDescription key="fontDescription" type="system" weight="light" pointSize="14"/>
+                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bnH-3t-eRh" userLabel="showButton">
+                    <rect key="frame" x="277" y="562" width="46" height="30"/>
+                    <state key="normal" title="SHOW"/>
+                </button>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstAttribute="trailing" secondItem="bSg-Ah-Wmo" secondAttribute="trailing" constant="24" id="2I6-tb-yXx"/>
-                <constraint firstItem="UEV-db-xvW" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="24" id="HGb-sQ-P4d"/>
-                <constraint firstItem="m5n-pu-ad0" firstAttribute="top" secondItem="bSg-Ah-Wmo" secondAttribute="bottom" constant="17" id="Jy0-8E-lGw"/>
-                <constraint firstItem="m5n-pu-ad0" firstAttribute="leading" secondItem="61P-Qq-DHa" secondAttribute="trailing" constant="13" id="MvF-5R-26Y"/>
-                <constraint firstItem="61P-Qq-DHa" firstAttribute="top" secondItem="UEV-db-xvW" secondAttribute="bottom" constant="22" id="OoP-dS-6Ti"/>
-                <constraint firstItem="61P-Qq-DHa" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="8" id="PbI-EW-9oo"/>
-                <constraint firstAttribute="trailing" secondItem="m5n-pu-ad0" secondAttribute="trailing" constant="24" id="Q5L-D3-ETj"/>
-                <constraint firstItem="UEV-db-xvW" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="8" id="YSb-Sm-Vc1"/>
-                <constraint firstItem="bSg-Ah-Wmo" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="20" id="csn-ZO-qqk"/>
-                <constraint firstItem="bSg-Ah-Wmo" firstAttribute="leading" secondItem="UEV-db-xvW" secondAttribute="trailing" constant="13" id="xDD-Jl-dBx"/>
+                <constraint firstItem="bSg-Ah-Wmo" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="8" id="0B8-lP-rP5"/>
+                <constraint firstAttribute="trailing" secondItem="61P-Qq-DHa" secondAttribute="trailing" constant="8" id="527-kz-ra0"/>
+                <constraint firstItem="bSg-Ah-Wmo" firstAttribute="top" secondItem="UEV-db-xvW" secondAttribute="bottom" constant="8" id="BXe-LC-QAa"/>
+                <constraint firstItem="m5n-pu-ad0" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="8" id="OqU-q9-5My"/>
+                <constraint firstItem="UEV-db-xvW" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="20" id="QuG-oH-gms"/>
+                <constraint firstAttribute="trailing" secondItem="m5n-pu-ad0" secondAttribute="trailing" constant="8" id="WDA-1X-x7Y"/>
+                <constraint firstAttribute="bottom" secondItem="bnH-3t-eRh" secondAttribute="bottom" constant="8" id="bJg-1Y-oVD"/>
+                <constraint firstItem="bnH-3t-eRh" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="cHu-T7-aia"/>
+                <constraint firstAttribute="trailing" secondItem="UEV-db-xvW" secondAttribute="trailing" constant="8" id="eam-FV-VGU"/>
+                <constraint firstItem="m5n-pu-ad0" firstAttribute="top" secondItem="61P-Qq-DHa" secondAttribute="bottom" constant="8" id="f65-Cj-RDF"/>
+                <constraint firstAttribute="trailing" secondItem="bSg-Ah-Wmo" secondAttribute="trailing" constant="8" id="gXZ-3T-Ma9"/>
+                <constraint firstAttribute="bottom" secondItem="m5n-pu-ad0" secondAttribute="bottom" constant="8" id="kLp-W9-Jq3"/>
+                <constraint firstItem="61P-Qq-DHa" firstAttribute="top" secondItem="bSg-Ah-Wmo" secondAttribute="bottom" constant="8" id="ve5-lq-b57"/>
+                <constraint firstItem="61P-Qq-DHa" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="8" id="xPl-bZ-LFv"/>
+                <constraint firstItem="UEV-db-xvW" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="8" id="xdc-5a-iCq"/>
             </constraints>
-            <point key="canvasLocation" x="632" y="664"/>
+            <point key="canvasLocation" x="758" y="650"/>
         </view>
     </objects>
 </document>
