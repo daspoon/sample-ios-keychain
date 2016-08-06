@@ -7,6 +7,7 @@
 */
 
 import UIKit
+import LocalAuthentication
 
 
 class ItemViewController : UIViewController
@@ -65,15 +66,16 @@ class ItemViewController : UIViewController
         assert(!editing, "unexpected state")
 
         if mode == .None {
-          // Update the value view and change mode to View
-          valueTextView.text = keychain[key] as! String
-          mode = .View
+          authenticateWithContinuation {
+            self.valueTextView.text = self.keychain[self.key] as! String
+            self.mode = .View
+            self.modeDidChange()
+          }
         }
         else {
           mode = .None
+          modeDidChange()
         }
-
-        modeDidChange()
       }
 
 
@@ -83,11 +85,10 @@ class ItemViewController : UIViewController
 
         assert(!editing, "invalid state")
 
-        // Note that mode can be set to Create only on initialization, so if we're not currently
-        // editing then we must represent an existing item; transition to Edit mode.
-        mode = .Edit
-
-        setEditing(true, animated: true)
+        authenticateWithContinuation {
+          self.mode = .Edit
+          self.setEditing(true, animated: true)
+        }
       }
 
 
@@ -122,6 +123,54 @@ class ItemViewController : UIViewController
         mode = .None
 
         setEditing(false, animated: true)
+      }
+
+
+    func authenticateWithContinuation(continuation: () -> Void)
+      {
+        // Authenticate using biometrices, or by falling-back to passcode if necessary.
+        // If successful, execute the given block on the main thread; otherwise report
+        // an error (if the request was not cancelled).
+
+        // For modes other than None just execute the completion and return, because we must
+        // already have authenticated in order to present the value. Note that authentication
+        // is not required for entry creation.
+        guard mode == .None else { continuation(); return }
+
+        let context = LAContext()
+        let reason = NSLocalizedString("AUTHENTICATE TO REVEAL KEYCHAIN ITEM", comment: "Authentication reason")
+
+        var done = false
+        for policy in [LAPolicy.DeviceOwnerAuthenticationWithBiometrics, .DeviceOwnerAuthentication] {
+          context.evaluatePolicy(policy, localizedReason: reason)
+            { (success, error) in
+                if success {
+                  dispatch_async(dispatch_get_main_queue(), continuation)
+                  done = true
+                }
+                else {
+                  switch LAError(rawValue: error!.code)! {
+                    case .UserFallback, .TouchIDNotAvailable, .TouchIDNotEnrolled, .TouchIDLockout, .SystemCancel :
+                      // Keep trying...
+                      break
+                    case .UserCancel :
+                      // The user has cancelled the request; stop trying.
+                      done = true
+                    case .PasscodeNotSet :
+                      // No passcode required; succeed.
+                      dispatch_async(dispatch_get_main_queue(), continuation)
+                      done = true
+                    default :
+                      // Some other error; report it and stop trying.
+                      dispatch_async(dispatch_get_main_queue()) {
+                        self.presentAlertWithTitle("AUTHENTICATION FAILED", message: error!.localizedFailureReason ?? "code \(error!.code)")
+                      }
+                      done = true
+                  }
+                }
+            }
+          guard !done else { break }
+        }
       }
 
 

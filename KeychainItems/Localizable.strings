@@ -13,3 +13,5 @@
 
 "KEY EXISTS" = "Key Exists";
 "AN ENTRY FOR THIS KEY ALREADY EXISTS" = "An entry for this key already exists.";
+
+"AUTHENTICATION FAILED" = "Authentication Failed";
