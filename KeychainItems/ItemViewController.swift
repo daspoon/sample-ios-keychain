@@ -246,6 +246,10 @@ class ItemViewController : UIViewController
 
         super.viewDidLoad()
 
+        // Localize labels
+        keyLabel.text = NSLocalizedString("KEY", comment: "Item key label")
+        valueLabel.text = NSLocalizedString("VALUE", comment: "Item value label")
+
         // Present the item key
         keyTextField.text = key
 

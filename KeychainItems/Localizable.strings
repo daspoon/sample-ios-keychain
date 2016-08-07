@@ -5,8 +5,9 @@
 */
 
 "ITEM" = "Item";
-
 "ITEM LIST" = "Items";
+"KEY" = "Key";
+"VALUE" = "Value";
 
 "KEY REQUIRED" = "Key Required";
 "PLEASE PROVIDE A KEY FOR THIS ENTRY" = "Please provide a key for this entry.";
