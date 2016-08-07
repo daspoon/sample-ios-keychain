@@ -69,6 +69,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5564ED951D57A83D00820CFB /* Supporting files */ = {
+			isa = PBXGroup;
+			children = (
+				557AE5671D454B45006C41EE /* Assets.xcassets */,
+				557AE56C1D454B45006C41EE /* Info.plist */,
+				557AE5691D454B45006C41EE /* LaunchScreen.storyboard */,
+			);
+			name = "Supporting files";
+			sourceTree = "<group>";
+		};
 		557AE5541D454B44006C41EE = {
 			isa = PBXGroup;
 			children = (
@@ -93,15 +103,13 @@
 			isa = PBXGroup;
 			children = (
 				557AE5601D454B45006C41EE /* AppDelegate.swift */,
+				557AE5721D46C431006C41EE /* Application.xib */,
 				55CAB1371D4C0F9200AE25E7 /* KeyChain.swift */,
 				557AE5771D46CB11006C41EE /* ItemViewController.swift */,
 				557AE5791D46CCD6006C41EE /* ItemViewController.xib */,
 				557AE5751D46CAFC006C41EE /* ListViewController.swift */,
-				557AE5721D46C431006C41EE /* Application.xib */,
-				557AE5671D454B45006C41EE /* Assets.xcassets */,
-				557AE5691D454B45006C41EE /* LaunchScreen.storyboard */,
-				557AE56C1D454B45006C41EE /* Info.plist */,
 				5564ED8E1D565B7800820CFB /* Localizable.strings */,
+				5564ED951D57A83D00820CFB /* Supporting files */,
 			);
 			path = KeychainItems;
 			sourceTree = "<group>";
