@@ -119,8 +119,8 @@ class ItemViewController : UIViewController
         // Add or update the new entry
         keychain[key] = valueTextView.text
 
-        // Revert to initial state after editing.
-        mode = .None
+        // Revert to viewable state after editing.
+        mode = .View
 
         setEditing(false, animated: true)
       }
