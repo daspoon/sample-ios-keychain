@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		5564ED8F1D565B7800820CFB /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5564ED8E1D565B7800820CFB /* Localizable.strings */; };
+		5564ED921D57A37B00820CFB /* License.txt in Resources */ = {isa = PBXBuildFile; fileRef = 5564ED901D57A37B00820CFB /* License.txt */; };
+		5564ED931D57A37B00820CFB /* ReadMe.txt in Resources */ = {isa = PBXBuildFile; fileRef = 5564ED911D57A37B00820CFB /* ReadMe.txt */; };
 		557AE5611D454B45006C41EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557AE5601D454B45006C41EE /* AppDelegate.swift */; };
 		557AE5681D454B45006C41EE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 557AE5671D454B45006C41EE /* Assets.xcassets */; };
 		557AE56B1D454B45006C41EE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 557AE5691D454B45006C41EE /* LaunchScreen.storyboard */; };
@@ -32,6 +34,8 @@
 
 /* Begin PBXFileReference section */
 		5564ED8E1D565B7800820CFB /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
+		5564ED901D57A37B00820CFB /* License.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = License.txt; sourceTree = "<group>"; };
+		5564ED911D57A37B00820CFB /* ReadMe.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ReadMe.txt; sourceTree = "<group>"; };
 		557AE55D1D454B45006C41EE /* KeychainItems.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KeychainItems.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		557AE5601D454B45006C41EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		557AE5671D454B45006C41EE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -68,6 +72,8 @@
 		557AE5541D454B44006C41EE = {
 			isa = PBXGroup;
 			children = (
+				5564ED901D57A37B00820CFB /* License.txt */,
+				5564ED911D57A37B00820CFB /* ReadMe.txt */,
 				557AE55F1D454B45006C41EE /* KeychainItems */,
 				55CAB13E1D4D723C00AE25E7 /* KeychainItemsTests */,
 				557AE55E1D454B45006C41EE /* Products */,
@@ -193,8 +199,10 @@
 			files = (
 				5564ED8F1D565B7800820CFB /* Localizable.strings in Resources */,
 				557AE56B1D454B45006C41EE /* LaunchScreen.storyboard in Resources */,
+				5564ED921D57A37B00820CFB /* License.txt in Resources */,
 				557AE5681D454B45006C41EE /* Assets.xcassets in Resources */,
 				557AE57B1D46CCD6006C41EE /* ItemViewController.xib in Resources */,
+				5564ED931D57A37B00820CFB /* ReadMe.txt in Resources */,
 				557AE5741D46C431006C41EE /* Application.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
