@@ -38,7 +38,7 @@ public class KeyChain : NSObject
       }
 
 
-    public var keys: [String]
+    public var keys: Set<String>
       {
         // Return the names of all keychain entries for the associated service.
 
@@ -59,9 +59,15 @@ public class KeyChain : NSObject
         }
 
         // The result is a CFArray containing the attributes (as CFDictionary) of each
-        // matching entry; each entry key is given by the value of the account attribute.
-        let items = result as! NSArray
-        return items.map { ($0 as! NSDictionary)[kSecAttrAccount as NSString] as! String }
+        // matching entry; return the corresponding set of keys, each given by the account
+        // attribute.
+        var set = Set<String>()
+        for entry in result as! NSArray {
+          let attrs = entry as! NSDictionary
+          let key = attrs[kSecAttrAccount as NSString] as! String
+          set.insert(key)
+        }
+        return set
       }
 
 
@@ -119,14 +125,21 @@ public class KeyChain : NSObject
                 kSecAttrService as NSString: service,
                 kSecAttrAccount as NSString: key,
               ]
-            status = data != nil
-                ? SecItemUpdate(update, [kSecValueData as NSString: data])
-                : SecItemDelete(update)
-            assert(status == errSecSuccess, "\(data != nil ? "SecItemUpdate" : "SecItemDelete") returned \(status)")
+            if data != nil {
+              status = SecItemUpdate(update, [kSecValueData as NSString: data])
+              assert(status == errSecSuccess, "SecItemUpdate returned \(status)")
+            }
+            else {
+              willChangeValueForKey("keys", withSetMutation: .MinusSetMutation, usingObjects: [key])
+              status = SecItemDelete(update)
+              assert(status == errSecSuccess, "SecItemDelete returned \(status)")
+              didChangeValueForKey("keys", withSetMutation: .MinusSetMutation, usingObjects: [key])
+            }
             break
           case errSecItemNotFound:
             // If there is no matching entry then create one, provided the given data is non-nil.
             if data != nil {
+              willChangeValueForKey("keys", withSetMutation: .UnionSetMutation, usingObjects: [key])
               status = SecItemAdd([
                   kSecClass as NSString: kSecClassGenericPassword,
                   kSecAttrService as NSString: service,
@@ -134,6 +147,7 @@ public class KeyChain : NSObject
                   kSecValueData as NSString: data,
                 ], nil)
               assert(status == errSecSuccess, "SecItemAdd returned \(status)")
+              didChangeValueForKey("keys", withSetMutation: .UnionSetMutation, usingObjects: [key])
             }
             break
           default:
