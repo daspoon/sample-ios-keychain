@@ -57,17 +57,29 @@ class ListViewController: UITableViewController
 
     override func tableView(sender: UITableView, numberOfRowsInSection section: Int) -> Int
       {
+        assert(section == 0, "unexpected argument")
+
         return keys.count
       }
 
 
     override func tableView(sender: UITableView, cellForRowAtIndexPath path: NSIndexPath) -> UITableViewCell
       {
-        assert(path.section == 0, "unexpected argument")
-
         let cell = sender.dequeueReusableCellWithIdentifier(cellReuseIdentifier, forIndexPath:path)
         cell.textLabel!.text = keys[path.row]
         return cell
+      }
+
+
+    override func tableView(sender: UITableView, editingStyleForRowAtIndexPath path: NSIndexPath) -> UITableViewCellEditingStyle
+      {
+        return .Delete
+      }
+
+
+    override func tableView(sender: UITableView, commitEditingStyle style: UITableViewCellEditingStyle, forRowAtIndexPath path: NSIndexPath)
+      {
+        keychain[keys[path.row]] = nil
       }
 
 
@@ -75,8 +87,6 @@ class ListViewController: UITableViewController
 
     override func tableView(sender: UITableView, didSelectRowAtIndexPath path: NSIndexPath)
       {
-        assert(path.section == 0, "unexpected argument")
-
         self.navigationController?.pushViewController(ItemViewController(keychain: keychain, key: keys[path.row]), animated: true)
       }
 
