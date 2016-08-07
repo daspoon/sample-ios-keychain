@@ -87,7 +87,7 @@ class ListViewController: UITableViewController
       {
         assert(sender === keychain && path == "keys")
 
-        keys = Array(keychain.keys)
+        keys = Array(keychain.keys).sort()
 
         if isViewLoaded() {
           tableView.reloadData()
