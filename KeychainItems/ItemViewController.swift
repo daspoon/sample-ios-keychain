@@ -55,6 +55,15 @@ class ItemViewController : UIViewController
         title = NSLocalizedString("ITEM", comment:"ItemViewController title")
 
         editing = mode == .Edit || mode == .Create
+
+        // Register to observe the application losing foreground status
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(applicationDidEnterBackground(_:)), name: UIApplicationDidEnterBackgroundNotification, object: nil)
+      }
+
+
+    deinit
+      {
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIApplicationDidEnterBackgroundNotification, object: nil)
       }
 
 
@@ -235,6 +244,16 @@ class ItemViewController : UIViewController
         guard editing == (mode == .Edit || mode == .Create) else { return false }
 
         return true
+      }
+
+    // MARK: - NSNotification
+
+    func applicationDidEnterBackground(notification: NSNotification)
+      {
+        // Hide our value when the application loses foreground status.
+
+        mode = .None
+        modeDidChange()
       }
 
 
