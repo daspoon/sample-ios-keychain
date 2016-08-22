@@ -20,7 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool
       {
-        // If the keychain doesn't exist the add a few keys...
+        // If the keychain doesn't exist the add a few items.
         if keychain.keys.count == 0 {
           keychain["greeting"] = "heynow"
           keychain["disposition"] = "sunny"
