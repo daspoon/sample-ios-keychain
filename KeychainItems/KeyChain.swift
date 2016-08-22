@@ -95,7 +95,8 @@ public class KeyChain : NSObject
         }
 
         // The result is CFData, return it.
-        return result as! NSData
+        let data = result as! NSData
+        return data
       }
 
 
