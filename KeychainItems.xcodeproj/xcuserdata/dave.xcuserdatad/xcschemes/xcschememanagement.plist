@@ -4,7 +4,7 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>KeychainItems.xcscheme</key>
+		<key>KeychainItems.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>0</integer>
@@ -18,6 +18,11 @@
 			<true/>
 		</dict>
 		<key>55CAB13C1D4D723C00AE25E7</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>55D1E11F1D77316200F9723C</key>
 		<dict>
 			<key>primary</key>
 			<true/>

@@ -10,6 +10,14 @@ import UIKit
 import LocalAuthentication
 
 
+// Disable authentication (via the Testing configuration) while running UI tests
+#if TESTING
+let enableAuthentication = false
+#else
+let enableAuthentication = true
+#endif
+
+
 class ItemViewController : UIViewController
   {
 
@@ -145,6 +153,9 @@ class ItemViewController : UIViewController
         // already have authenticated in order to present the value. Note that authentication
         // is not required for entry creation.
         guard mode == .None else { continuation(); return }
+
+        // Skip authentication while testing, since those apis aren't UI-testable.
+        guard enableAuthentication else { continuation(); return }
 
         let context = LAContext()
         let reason = NSLocalizedString("AUTHENTICATE TO REVEAL KEYCHAIN ITEM", comment: "Authentication reason")
