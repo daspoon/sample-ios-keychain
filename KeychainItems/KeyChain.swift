@@ -14,10 +14,10 @@
 import Foundation
 
 
-public class KeyChain : NSObject
+open class KeyChain : NSObject
   {
 
-    public let service: String
+    open let service: String
 
 
     public init(service id: String)
@@ -34,11 +34,11 @@ public class KeyChain : NSObject
       {
         // Initialize a new instance using the application bundle identifier of as service identifier.
 
-        self.init(service: NSBundle.mainBundle().bundleIdentifier!)
+        self.init(service: Bundle.main.bundleIdentifier!)
       }
 
 
-    public var keys: Set<String>
+    open var keys: Set<String>
       {
         // Return the names of all keychain entries for the associated service.
 
@@ -52,7 +52,7 @@ public class KeyChain : NSObject
 
         // Perform the search, returning an empty list on failure.
         var result: AnyObject?
-        let status = withUnsafeMutablePointer(&result) { SecItemCopyMatching(query, $0) }
+        let status = withUnsafeMutablePointer(to: &result) { SecItemCopyMatching(query, $0) }
         if status != errSecSuccess {
           assert(status == errSecItemNotFound, "SecItemCopyMatching returned \(status)")
           return []
@@ -71,7 +71,7 @@ public class KeyChain : NSObject
       }
 
 
-    public func dataForKey(key: String) -> NSData?
+    open func dataForKey(_ key: String) -> Data?
       {
         // Return the data associated with the given key.
 
@@ -88,19 +88,19 @@ public class KeyChain : NSObject
 
         // Perform the search, returning nil on failure.
         var result: AnyObject?
-        let status = withUnsafeMutablePointer(&result) { SecItemCopyMatching(query, $0) }
+        let status = withUnsafeMutablePointer(to: &result) { SecItemCopyMatching(query, $0) }
         if status != errSecSuccess {
           assert(status == errSecItemNotFound, "SecItemCopyMatching returned \(status)")
           return nil
         }
 
         // The result is CFData, return it.
-        let data = result as! NSData
+        let data = result as! Data
         return data
       }
 
 
-    public func setData(data: NSData!, forKey key: String)
+    open func setData(_ data: Data!, forKey key: String)
       {
         // Set the data for the given key, removing the entry if data is nil.
 
@@ -127,28 +127,30 @@ public class KeyChain : NSObject
                 kSecAttrAccount as NSString: key,
               ]
             if data != nil {
-              status = SecItemUpdate(update, [kSecValueData as NSString: data])
+              let attrs: NSDictionary = [ String(kSecValueData): data ]
+              status = SecItemUpdate(update, attrs)
               assert(status == errSecSuccess, "SecItemUpdate returned \(status)")
             }
             else {
-              willChangeValueForKey("keys", withSetMutation: .MinusSetMutation, usingObjects: [key])
+              willChangeValue(forKey: "keys", withSetMutation: .minus, using: [key])
               status = SecItemDelete(update)
               assert(status == errSecSuccess, "SecItemDelete returned \(status)")
-              didChangeValueForKey("keys", withSetMutation: .MinusSetMutation, usingObjects: [key])
+              didChangeValue(forKey: "keys", withSetMutation: .minus, using: [key])
             }
             break
           case errSecItemNotFound:
             // If there is no matching entry then create one, provided the given data is non-nil.
             if data != nil {
-              willChangeValueForKey("keys", withSetMutation: .UnionSetMutation, usingObjects: [key])
-              status = SecItemAdd([
-                  kSecClass as NSString: kSecClassGenericPassword,
-                  kSecAttrService as NSString: service,
-                  kSecAttrAccount as NSString: key,
-                  kSecValueData as NSString: data,
-                ], nil)
+              let attrs: NSDictionary = [
+                  String(kSecClass): kSecClassGenericPassword,
+                  String(kSecAttrService): service,
+                  String(kSecAttrAccount): key,
+                  String(kSecValueData): data,
+                ]
+              willChangeValue(forKey: "keys", withSetMutation: .union, using: [key])
+              status = SecItemAdd(attrs, nil)
               assert(status == errSecSuccess, "SecItemAdd returned \(status)")
-              didChangeValueForKey("keys", withSetMutation: .UnionSetMutation, usingObjects: [key])
+              didChangeValue(forKey: "keys", withSetMutation: .union, using: [key])
             }
             break
           default:
@@ -157,7 +159,7 @@ public class KeyChain : NSObject
       }
 
 
-    public func removeDataForKey(key: String)
+    open func removeDataForKey(_ key: String)
       {
         // Remove the data for the given key.
 
@@ -165,7 +167,7 @@ public class KeyChain : NSObject
       }
 
 
-    public func removeAll()
+    open func removeAll()
       {
         // Remove all entries.
 
@@ -185,12 +187,12 @@ public extension KeyChain
       {
         get {
           guard let data = dataForKey(key) else { return nil }
-          return NSKeyedUnarchiver.unarchiveObjectWithData(data)!
+          return NSKeyedUnarchiver.unarchiveObject(with: data)! as AnyObject?
         }
 
         set(newObject) {
           if let object = newObject {
-            setData(NSKeyedArchiver.archivedDataWithRootObject(object), forKey: key)
+            setData(NSKeyedArchiver.archivedData(withRootObject: object), forKey: key)
           }
           else {
             setData(nil, forKey: key)

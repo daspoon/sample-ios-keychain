@@ -54,14 +54,14 @@ class KeychainItemsTests: XCTestCase
         var dict: [String: NSObject] = [:]
         for i in 0 ..< 10 {
           let key = "\(i)"
-          let value = NSNumber(integer: i)
+          let value = NSNumber(value: i as Int)
           keychain[key] = value
           XCTAssert(keychain[key] as! NSNumber == value)
           dict[key] = value
         }
 
         // Ensure both have the same sorted list of keys
-        XCTAssert(keychain.keys.sort() == dict.keys.sort())
+        XCTAssert(keychain.keys.sorted() == dict.keys.sorted())
 
         // Iteratively remove elements, ensuring the contents remain equal
         for i in 0 ..< 10 {
@@ -69,7 +69,7 @@ class KeychainItemsTests: XCTestCase
           let key = "\(i)"
           keychain[key] = nil
           XCTAssert(keychain[key] == nil)
-          dict.removeValueForKey(key)
+          dict.removeValue(forKey: key)
         }
 
         XCTAssert(keychain.keys == [] && Array(dict.keys) == [])
@@ -86,8 +86,8 @@ class KeychainItemsTests: XCTestCase
         XCTAssert(keychain.keys == [])
 
         for _ in 0 ..< 20 {
-          let uuid = NSUUID().UUIDString
-          keychain["uuid"] = uuid
+          let uuid = UUID().uuidString
+          keychain["uuid"] = uuid as AnyObject?
           XCTAssert(keychain["uuid"] as! String == uuid)
         }
 

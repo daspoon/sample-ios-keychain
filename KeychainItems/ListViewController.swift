@@ -21,9 +21,9 @@ class ListViewController: UITableViewController
       {
         self.keychain = keychain
 
-        super.init(style: .Plain)
+        super.init(style: .plain)
 
-        keychain.addObserver(self, forKeyPath: "keys", options: .Initial, context: nil)
+        keychain.addObserver(self, forKeyPath: "keys", options: .initial, context: nil)
 
         title = NSLocalizedString("ITEM LIST", comment: "ListViewController title")
       }
@@ -35,7 +35,7 @@ class ListViewController: UITableViewController
       }
 
 
-    func addEntry(sender: AnyObject?)
+    func addEntry(_ sender: AnyObject?)
       {
         self.navigationController?.pushViewController(ItemViewController(keychain: keychain), animated: true)
       }
@@ -47,15 +47,15 @@ class ListViewController: UITableViewController
       {
         super.viewDidLoad()
 
-        tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: cellReuseIdentifier)
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellReuseIdentifier)
 
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: #selector(ListViewController.addEntry(_:)))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(ListViewController.addEntry(_:)))
       }
 
 
     // MARK: - UITableViewDataSource
 
-    override func tableView(sender: UITableView, numberOfRowsInSection section: Int) -> Int
+    override func tableView(_ sender: UITableView, numberOfRowsInSection section: Int) -> Int
       {
         assert(section == 0, "unexpected argument")
 
@@ -63,21 +63,21 @@ class ListViewController: UITableViewController
       }
 
 
-    override func tableView(sender: UITableView, cellForRowAtIndexPath path: NSIndexPath) -> UITableViewCell
+    override func tableView(_ sender: UITableView, cellForRowAt path: IndexPath) -> UITableViewCell
       {
-        let cell = sender.dequeueReusableCellWithIdentifier(cellReuseIdentifier, forIndexPath:path)
+        let cell = sender.dequeueReusableCell(withIdentifier: cellReuseIdentifier, for:path)
         cell.textLabel!.text = keys[path.row]
         return cell
       }
 
 
-    override func tableView(sender: UITableView, editingStyleForRowAtIndexPath path: NSIndexPath) -> UITableViewCellEditingStyle
+    override func tableView(_ sender: UITableView, editingStyleForRowAt path: IndexPath) -> UITableViewCellEditingStyle
       {
-        return .Delete
+        return .delete
       }
 
 
-    override func tableView(sender: UITableView, commitEditingStyle style: UITableViewCellEditingStyle, forRowAtIndexPath path: NSIndexPath)
+    override func tableView(_ sender: UITableView, commit style: UITableViewCellEditingStyle, forRowAt path: IndexPath)
       {
         keychain[keys[path.row]] = nil
       }
@@ -85,7 +85,7 @@ class ListViewController: UITableViewController
 
     // MARK: - UITableViewDelegate
 
-    override func tableView(sender: UITableView, didSelectRowAtIndexPath path: NSIndexPath)
+    override func tableView(_ sender: UITableView, didSelectRowAt path: IndexPath)
       {
         self.navigationController?.pushViewController(ItemViewController(keychain: keychain, key: keys[path.row]), animated: true)
       }
@@ -93,13 +93,11 @@ class ListViewController: UITableViewController
 
     // MARK: - NSKeyValueObserving
 
-    override func observeValueForKeyPath(path: String?, ofObject sender: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>)
+    override func observeValue(forKeyPath path: String?, of sender: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?)
       {
-        assert(sender === keychain && path == "keys")
+        keys = Array(keychain.keys).sorted()
 
-        keys = Array(keychain.keys).sort()
-
-        if isViewLoaded() {
+        if isViewLoaded {
           tableView.reloadData()
         }
       }

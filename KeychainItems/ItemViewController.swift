@@ -24,13 +24,13 @@ class ItemViewController : UIViewController
     enum Mode
       {
         // Possible modes of interaction...
-        case None
+        case none
           // Item value is not visible.
-        case View
+        case view
           // Item value is visible, but not editable.
-        case Edit
+        case edit
           // Editing an existing item.
-        case Create
+        case create
           // Creating a new item.
       }
 
@@ -56,67 +56,67 @@ class ItemViewController : UIViewController
       {
         keychain = kc
         key = k ?? ""
-        mode = k == nil ? .Create : .None
+        mode = k == nil ? .create : .none
 
         super.init(nibName: "ItemViewController", bundle: nil)
 
         title = NSLocalizedString("ITEM", comment:"ItemViewController title")
 
-        editing = mode == .Edit || mode == .Create
+        isEditing = mode == .edit || mode == .create
 
         // Register to observe the application losing foreground status
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(applicationDidEnterBackground(_:)), name: UIApplicationDidEnterBackgroundNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(applicationDidEnterBackground(_:)), name: NSNotification.Name.UIApplicationDidEnterBackground, object: nil)
       }
 
 
     deinit
       {
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIApplicationDidEnterBackgroundNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIApplicationDidEnterBackground, object: nil)
       }
 
 
-    func show(sender: AnyObject?)
+    func show(_ sender: AnyObject?)
       {
         // The target of the show/hide button.
 
         // This can't happen while editing since the button is not visible.
-        assert(!editing, "unexpected state")
+        assert(!isEditing, "unexpected state")
 
-        if mode == .None {
+        if mode == .none {
           authenticateWithContinuation {
             self.valueTextView.text = self.keychain[self.key] as! String
-            self.mode = .View
+            self.mode = .view
             self.modeDidChange()
           }
         }
         else {
-          mode = .None
+          mode = .none
           modeDidChange()
         }
       }
 
 
-    func edit(sender: AnyObject?)
+    func edit(_ sender: AnyObject?)
       {
         // The action of the edit navbar button.
 
-        assert(!editing, "invalid state")
+        assert(!isEditing, "invalid state")
 
         authenticateWithContinuation {
-          self.mode = .Edit
+          self.mode = .edit
           self.setEditing(true, animated: true)
         }
       }
 
 
-    func done(sender: AnyObject?)
+    func done(_ sender: AnyObject?)
       {
         // The action of the done navbar button.
 
-        assert(editing, "invalid state")
+        assert(isEditing, "invalid state")
 
         // Get the content of the key field, stripped of enclosing whitespace
-        let newKey = keyTextField.text?.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet()) ?? ""
+        let newKey = keyTextField.text?.trimmingCharacters(in: CharacterSet.whitespaces) ?? ""
 
         // Ensure the new key is not empty
         guard newKey != "" else { return presentAlertWithTitle("KEY REQUIRED", message: "PLEASE PROVIDE A KEY FOR THIS ENTRY") }
@@ -134,16 +134,16 @@ class ItemViewController : UIViewController
         }
 
         // Add or update the new entry
-        keychain[key] = valueTextView.text
+        keychain[key] = valueTextView.text as AnyObject?
 
         // Revert to viewable state after editing.
-        mode = .View
+        mode = .view
 
         setEditing(false, animated: true)
       }
 
 
-    func authenticateWithContinuation(continuation: () -> Void)
+    func authenticateWithContinuation(_ continuation: @escaping () -> Void)
       {
         // Authenticate using biometrices, or by falling-back to passcode if necessary.
         // If successful, execute the given block on the main thread; otherwise report
@@ -152,7 +152,7 @@ class ItemViewController : UIViewController
         // For modes other than None just execute the completion and return, because we must
         // already have authenticated in order to present the value. Note that authentication
         // is not required for entry creation.
-        guard mode == .None else { continuation(); return }
+        guard mode == .none else { continuation(); return }
 
         // Skip authentication while testing, since those apis aren't UI-testable.
         guard enableAuthentication else { continuation(); return }
@@ -161,29 +161,29 @@ class ItemViewController : UIViewController
         let reason = NSLocalizedString("AUTHENTICATE TO REVEAL KEYCHAIN ITEM", comment: "Authentication reason")
 
         var done = false
-        for policy in [LAPolicy.DeviceOwnerAuthenticationWithBiometrics, .DeviceOwnerAuthentication] {
+        for policy in [LAPolicy.deviceOwnerAuthenticationWithBiometrics, .deviceOwnerAuthentication] {
           context.evaluatePolicy(policy, localizedReason: reason)
             { (success, error) in
                 if success {
-                  dispatch_async(dispatch_get_main_queue(), continuation)
+                  DispatchQueue.main.async(execute: continuation)
                   done = true
                 }
                 else {
-                  switch LAError(rawValue: error!.code)! {
-                    case .UserFallback, .TouchIDNotAvailable, .TouchIDNotEnrolled, .TouchIDLockout, .SystemCancel :
+                  switch LAError.Code(rawValue: error!._code)! {
+                    case .userFallback, .touchIDNotAvailable, .touchIDNotEnrolled, .touchIDLockout, .systemCancel :
                       // Keep trying...
                       break
-                    case .UserCancel :
+                    case .userCancel :
                       // The user has cancelled the request; stop trying.
                       done = true
-                    case .PasscodeNotSet :
+                    case .passcodeNotSet :
                       // No passcode required; succeed.
-                      dispatch_async(dispatch_get_main_queue(), continuation)
+                      DispatchQueue.main.async(execute: continuation)
                       done = true
                     default :
                       // Some other error; report it and stop trying.
-                      dispatch_async(dispatch_get_main_queue()) {
-                        self.presentAlertWithTitle("AUTHENTICATION FAILED", message: error!.localizedFailureReason ?? "code \(error!.code)")
+                      DispatchQueue.main.async {
+                        self.presentAlertWithTitle("AUTHENTICATION FAILED", message: (error as? String) ?? "")
                       }
                       done = true
                   }
@@ -194,7 +194,7 @@ class ItemViewController : UIViewController
       }
 
 
-    func presentAlertWithTitle(title: String, message: String)
+    func presentAlertWithTitle(_ title: String, message: String)
       {
         // Present a UIAlertController with the given (unlocalized) title and message. The alert
         // has a single dismiss button and no completion block.
@@ -202,16 +202,16 @@ class ItemViewController : UIViewController
         let alert = UIAlertController(
             title: NSLocalizedString(title, comment: "Alert title"),
             message: NSLocalizedString(message, comment: "Alert message"),
-            preferredStyle: .Alert
+            preferredStyle: .alert
           )
 
         alert.addAction(UIAlertAction(
             title: NSLocalizedString("OK", comment: "Alert dismiss title"),
-            style: .Default,
+            style: .default,
             handler: nil
           ))
 
-        presentViewController(alert, animated: true, completion: nil)
+        present(alert, animated: true, completion: nil)
       }
 
 
@@ -220,28 +220,28 @@ class ItemViewController : UIViewController
         // Update the UI state to match our mode.
 
         // Determine editability of the key
-        keyTextField.enabled = editing
+        keyTextField.isEnabled = isEditing
 
         // Determine visibility/editability of the value
-        valueLabel.hidden = mode == .None
-        valueTextView.hidden = mode == .None
-        valueTextView.editable = editing
+        valueLabel.isHidden = mode == .none
+        valueTextView.isHidden = mode == .none
+        valueTextView.isEditable = isEditing
 
         // Determine title and visibility of the show button
-        let showButtonTitle = mode == .None ? "SHOW" : "HIDE"
-        showButton.setTitle(showButtonTitle, forState: .Normal)
-        showButton.hidden = editing
+        let showButtonTitle = mode == .none ? "SHOW" : "HIDE"
+        showButton.setTitle(showButtonTitle, for: UIControlState())
+        showButton.isHidden = isEditing
 
         // Determine the form of the edit button
-        navigationItem.rightBarButtonItem = editing
-          ? UIBarButtonItem(barButtonSystemItem:.Done, target:self, action:#selector(ItemViewController.done(_:)))
-          : UIBarButtonItem(barButtonSystemItem:.Edit, target:self, action:#selector(ItemViewController.edit(_:)))
+        navigationItem.rightBarButtonItem = isEditing
+          ? UIBarButtonItem(barButtonSystemItem:.done, target:self, action:#selector(ItemViewController.done(_:)))
+          : UIBarButtonItem(barButtonSystemItem:.edit, target:self, action:#selector(ItemViewController.edit(_:)))
 
         // Set the first responder appropriately
         switch mode {
-          case .Create :
+          case .create :
             keyTextField.becomeFirstResponder()
-          case .Edit :
+          case .edit :
             valueTextView.becomeFirstResponder()
           default :
             break
@@ -252,18 +252,18 @@ class ItemViewController : UIViewController
     var invariant: Bool
       {
         // Ensure our mode is consistent with the editing state
-        guard editing == (mode == .Edit || mode == .Create) else { return false }
+        guard isEditing == (mode == .edit || mode == .create) else { return false }
 
         return true
       }
 
     // MARK: - NSNotification
 
-    func applicationDidEnterBackground(notification: NSNotification)
+    func applicationDidEnterBackground(_ notification: Notification)
       {
         // Hide our value when the application loses foreground status.
 
-        mode = .None
+        mode = .none
         modeDidChange()
       }
 
@@ -286,22 +286,22 @@ class ItemViewController : UIViewController
         // Give the value view a border and a slightly darker background color.
         valueTextView.layer.cornerRadius = 8
         valueTextView.layer.borderWidth = 1
-        valueTextView.layer.borderColor = UIColor(red: 0.90, green: 0.90, blue: 0.90, alpha: 1).CGColor
+        valueTextView.layer.borderColor = UIColor(red: 0.90, green: 0.90, blue: 0.90, alpha: 1).cgColor
         valueTextView.backgroundColor = UIColor(red: 0.98, green: 0.98, blue: 0.98, alpha: 1)
 
         // Set the target/action of the show button
-        showButton.addTarget(self, action: #selector(ItemViewController.show(_:)), forControlEvents: .TouchUpInside)
+        showButton.addTarget(self, action: #selector(ItemViewController.show(_:)), for: .touchUpInside)
 
         // Sync UI elements with our mode
         modeDidChange()
       }
 
 
-    override func setEditing(state: Bool, animated: Bool)
+    override func setEditing(_ state: Bool, animated: Bool)
       {
         super.setEditing(state, animated:animated)
 
-        if isViewLoaded() {
+        if isViewLoaded {
           modeDidChange()
         }
       }

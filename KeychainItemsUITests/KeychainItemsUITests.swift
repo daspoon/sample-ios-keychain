@@ -27,13 +27,13 @@ class KeychainItemsUITests: XCTestCase
         XCUIApplication().launch()
 
         // In UI tests it’s important to set the initial state - such as interface orientation - required for your tests before they run. The setUp method is a good place to do this.
-        XCUIDevice.sharedDevice().orientation = .Portrait
+        XCUIDevice.shared().orientation = .portrait
       }
     
 
     // Auxiliary methods
 
-    func addEntry(key: String, value: String, existing: Bool=false) -> XCUIElement
+    func addEntry(_ key: String, value: String, existing: Bool=false) -> XCUIElement
       {
         // A helper method to create an entry for the given key/value pair. The 'existing' argument indicates whether or not an entry is expected to exist for the given key and thus whether or not the creation attempt should fail with an alert.
 
@@ -47,18 +47,18 @@ class KeychainItemsUITests: XCTestCase
         app.navigationBars["Items"].buttons["Add"].tap()
 
         // Locate the superview containing the key and value views
-        let contentView = app.otherElements.containingType(.NavigationBar, identifier:"Item").childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element
+        let contentView = app.otherElements.containing(.navigationBar, identifier:"Item").children(matching: .other).element.children(matching: .other).element.children(matching: .other).element
         XCTAssert(contentView.exists)
 
         // Assign the specified key to the appropriate TextField
-        let keyField = contentView.childrenMatchingType(.TextField).element
-        XCTAssert(keyField.hittable)
+        let keyField = contentView.children(matching: .textField).element
+        XCTAssert(keyField.isHittable)
         keyField.tap()
         keyField.typeText(key)
 
         // Assign the specified value to the appropriate TextView
-        let valueView = contentView.childrenMatchingType(.TextView).element
-        XCTAssert(valueView.hittable)
+        let valueView = contentView.children(matching: .textView).element
+        XCTAssert(valueView.isHittable)
         valueView.tap()
         valueView.typeText(value)
 
@@ -90,7 +90,7 @@ class KeychainItemsUITests: XCTestCase
     func testEntryAddition()
       {
         // Generate a key for an entry which doesn't already exist in the table.
-        let uniqueKey = NSUUID().UUIDString
+        let uniqueKey = UUID().uuidString
 
         // Add an entry for that key
         addEntry(uniqueKey, value: "some secret")
@@ -100,7 +100,7 @@ class KeychainItemsUITests: XCTestCase
     func testMultipleEntryAddition()
       {
         // Generate a key for an entry which doesn't already exist in the table.
-        let uniqueKey = NSUUID().UUIDString
+        let uniqueKey = UUID().uuidString
 
         // Add an entry for that key
         addEntry(uniqueKey, value: "some secret", existing: false)
@@ -112,8 +112,8 @@ class KeychainItemsUITests: XCTestCase
 
     func testShowDetail()
       {
-        let uniqueKey = NSUUID().UUIDString
-        let secretValue = NSUUID().UUIDString
+        let uniqueKey = UUID().uuidString
+        let secretValue = UUID().uuidString
 
         let entryCell = addEntry(uniqueKey, value: secretValue)
 
@@ -121,22 +121,22 @@ class KeychainItemsUITests: XCTestCase
         entryCell.tap()
 
         // Locate the superview containing the key and value views
-        let contentView = app.otherElements.containingType(.NavigationBar, identifier:"Item").childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element
+        let contentView = app.otherElements.containing(.navigationBar, identifier:"Item").children(matching: .other).element.children(matching: .other).element.children(matching: .other).element
 
         // Ensure key field contains the expected value
-        let keyField = contentView.childrenMatchingType(.TextField).element
+        let keyField = contentView.children(matching: .textField).element
         XCTAssert(keyField.visible == true)
-        XCTAssert(keyField.value as? String == .Some(uniqueKey))
+        XCTAssert(keyField.value as? String == .some(uniqueKey))
 
         // Ensure the value view is not visible
-        let valueView = contentView.childrenMatchingType(.TextView).element
+        let valueView = contentView.children(matching: .textView).element
         XCTAssert(valueView.visible == false)
 
         // Tapping the show button reveals the text view with the expected vaue
         let showButton = app.buttons["SHOW"]
         showButton.tap()
         XCTAssert(valueView.visible)
-        XCTAssert(valueView.value as? String == Optional.Some(secretValue))
+        XCTAssert(valueView.value as? String == Optional.some(secretValue))
 
         // Tapping the hide button hides the text view again
         let hideButton = app.buttons["HIDE"]

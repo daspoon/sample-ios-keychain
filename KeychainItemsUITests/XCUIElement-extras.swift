@@ -18,8 +18,8 @@ extension XCUIElement
 
         let windows = XCUIApplication().windows
         for i in 0 ..< windows.count {
-          let window = windows.elementBoundByIndex(i)
-          if window.hittable {
+          let window = windows.element(boundBy: i)
+          if window.isHittable {
             return window
           }
         }
@@ -31,7 +31,7 @@ extension XCUIElement
       {
         // Determine whether or not the receiver is visible. Adapted from http://stackoverflow.com/a/33538255/6566144
 
-        guard exists && hittable else { return false }
+        guard exists && isHittable else { return false }
 
         return !frame.isEmpty && window.frame.intersects(frame)
       }
